@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -185,6 +186,7 @@ Widget campoDeTextoMoeda(
       controller: c,
       onChanged: f,
       keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
       cursorColor: Colors.white,
       decoration: InputDecoration(
         prefixText: prefix,
