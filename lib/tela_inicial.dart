@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:intl/intl.dart';
 
 Uri requisicao =
@@ -185,8 +184,8 @@ Widget campoDeTextoMoeda(
     child: TextField(
       controller: c,
       onChanged: f,
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*[,.]?\d*$'))],
       cursorColor: Colors.white,
       decoration: InputDecoration(
         prefixText: prefix,
