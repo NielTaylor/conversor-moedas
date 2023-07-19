@@ -184,7 +184,7 @@ Widget campoDeTextoMoeda(
     child: TextField(
       controller: c,
       onChanged: f,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*[,.]?\d*$'))],
       cursorColor: Colors.white,
       decoration: InputDecoration(
