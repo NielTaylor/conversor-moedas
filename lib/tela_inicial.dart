@@ -185,8 +185,8 @@ Widget campoDeTextoMoeda(
     child: TextField(
       controller: c,
       onChanged: f,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
       cursorColor: Colors.white,
       decoration: InputDecoration(
         prefixText: prefix,
