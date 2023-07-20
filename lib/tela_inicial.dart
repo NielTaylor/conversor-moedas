@@ -11,7 +11,9 @@ Uri requisicao =
     Uri.parse('https://api.hgbrasil.com/finance?format=json-cors&key=4af11e65');
 
 class TelaInicial extends StatefulWidget {
-  const TelaInicial({super.key});
+  const TelaInicial({
+    super.key,
+  });
 
   @override
   State<TelaInicial> createState() => _TelaInicialState();
@@ -28,9 +30,9 @@ class _TelaInicialState extends State<TelaInicial> {
   double euro = 0;
   double bitcoin = 0;
 
-  
-
   void _realMudou(String texto) {
+    validarValor(texto);
+
     if (texto.isEmpty) {
       _limparSeEstarVazio();
       return;
@@ -52,7 +54,6 @@ class _TelaInicialState extends State<TelaInicial> {
     realControlador.text = formatarMoeda.format(dolar * this.dolar);
     euroControlador.text = formatarMoeda.format(dolar * this.dolar / euro);
     bitcoinControlador.text = (dolar * this.dolar / bitcoin).toStringAsFixed(8);
-
   }
 
   void _euroMudou(String texto) {
@@ -75,7 +76,8 @@ class _TelaInicialState extends State<TelaInicial> {
 
     double bitcoin = double.parse(texto.replaceAll(',', '.'));
     realControlador.text = formatarMoeda.format(1 * this.bitcoin);
-    dolarControlador.text = formatarMoeda.format(bitcoin * this.bitcoin / dolar);
+    dolarControlador.text =
+        formatarMoeda.format(bitcoin * this.bitcoin / dolar);
     euroControlador.text = formatarMoeda.format(bitcoin * this.bitcoin / euro);
   }
 
@@ -170,36 +172,54 @@ class _TelaInicialState extends State<TelaInicial> {
     name: '',
   );
 
-}
+  void validarValor(String valor) {
+    RegExp validarValor = RegExp(r'^\d*[,.]?\d*$');
+    if (validarValor.hasMatch(valor) && valor.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Digite um valor válido',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 18),
+        ),
+        backgroundColor: Colors.red,
+      ));
+    } else {
+      return;
+    }
+  }
 
-Widget campoDeTextoMoeda(
-    String prefix, String label, TextEditingController c, Function(String) f) {
-  return Padding(
-    padding: const EdgeInsets.only(
-      left: 15.0,
-      right: 15.0,
-      top: 7.5,
-      bottom: 7.5,
-    ),
-    child: TextField(
-      controller: c,
-      onChanged: f,
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*[,.]?\d*$'))],
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        prefixText: prefix,
-        labelText: label,
+  Widget campoDeTextoMoeda(String prefix, String label, TextEditingController c,
+      Function(String) f) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 15.0,
+        right: 15.0,
+        top: 7.5,
+        bottom: 7.5,
       ),
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
+      child: TextField(
+        controller: c,
+        onChanged: f,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'^\d*[,.]?\d*$'))
+        ],
+        cursorColor: Colors.white,
+        decoration: InputDecoration(
+          prefixText: prefix,
+          labelText: label,
+        ),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Future<Map> pegarDados() async {
-  http.Response resposta = await http.get(requisicao);
-  return json.decode(resposta.body);
+  Future<Map> pegarDados() async {
+    http.Response resposta = await http.get(requisicao);
+    return json.decode(resposta.body);
+  }
 }
